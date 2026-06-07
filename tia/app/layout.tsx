@@ -4,11 +4,11 @@ import Nav from './components/Nav'
 
 export const metadata: Metadata = {
   title: 'The Internet Atlas',
-  description: 'Every tool. Every category. No pay-to-play.',
+  description: 'Welcome to the internet. A guide to the best websites and tools — organized by what you want to do.',
   metadataBase: new URL('https://theinternetatlas.com'),
   openGraph: {
     title: 'The Internet Atlas',
-    description: 'Every tool. Every category. No pay-to-play.',
+    description: 'Welcome to the internet. A guide to the best websites and tools — organized by what you want to do.',
     url: 'https://theinternetatlas.com',
     siteName: 'The Internet Atlas',
   },
@@ -34,7 +34,7 @@ export default function RootLayout({
           color: 'var(--ink-3)',
           letterSpacing: '0.03em',
         }}>
-          THE INTERNET ATLAS — Free to use. No pay-to-play. No ads in listings.
+          THE INTERNET ATLAS — A free guide to the internet. No pay-to-play. No ads in listings.
         </footer>
       </body>
     </html>
