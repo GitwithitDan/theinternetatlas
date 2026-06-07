@@ -27,14 +27,17 @@ export default function HomeClient({ listings, categories }: Props) {
   const [activeType, setActiveType] = useState<string | null>(null)
 
   const filtered = useMemo(() => {
-    const q = query.toLowerCase()
+    // Split query into individual words, filter out short stop words
+    const stopWords = new Set(['a', 'an', 'the', 'to', 'for', 'and', 'or', 'of', 'in', 'on', 'at', 'is', 'it'])
+    const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !stopWords.has(w))
     return listings.filter((l) => {
       if (activeCategory && l.category !== activeCategory) return false
       if (activePricing && l.pricing !== activePricing) return false
       if (activeType && l.type !== activeType) return false
-      if (q) {
-        const hay = [l.name, l.description, l.category, ...(l.tags || [])].join(' ').toLowerCase()
-        if (!hay.includes(q)) return false
+      if (words.length > 0) {
+        const hay = [l.name, l.description, l.category, l.best_for || '', ...(l.tags || [])].join(' ').toLowerCase()
+        // Match if ANY meaningful word appears in the entry
+        if (!words.some(w => hay.includes(w))) return false
       }
       return true
     })
