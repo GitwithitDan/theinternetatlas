@@ -30,19 +30,27 @@ export default async function HomePage() {
           fontWeight: 400,
           lineHeight: 1.05,
           letterSpacing: '-0.02em',
-          marginBottom: '1rem',
+          marginBottom: '1.25rem',
         }}>
-          Every tool.<br />
-          <em style={{ color: 'var(--ink-2)', fontStyle: 'italic' }}>Every category.</em>
+          Welcome to the internet.<br />
+          <em style={{ color: 'var(--ink-2)', fontStyle: 'italic' }}>What are you looking to do?</em>
         </h1>
         <p style={{
-          fontFamily: 'var(--mono)',
-          fontSize: '13px',
-          color: 'var(--ink-3)',
-          letterSpacing: '0.03em',
-          marginBottom: '0.5rem',
+          fontSize: '16px',
+          color: 'var(--ink-2)',
+          lineHeight: 1.6,
+          maxWidth: '520px',
+          marginBottom: '1rem',
         }}>
-          {listings.length} entries · {categories.length} categories · no pay-to-play
+          A guide to the best websites and tools on the internet — organized by what you actually want to accomplish, not by what they call themselves.
+        </p>
+        <p style={{
+          fontFamily: 'var(--mono)',
+          fontSize: '12px',
+          color: 'var(--ink-4)',
+          letterSpacing: '0.03em',
+        }}>
+          {listings.length} entries · {categories.length} categories · no pay-to-play · no ads in listings
         </p>
       </section>
 
