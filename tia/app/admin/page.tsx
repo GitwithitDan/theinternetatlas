@@ -7,7 +7,7 @@ import AdminLogin from './AdminLogin'
 export const dynamic = 'force-dynamic'
 
 export default async function AdminPage() {
-  const authed = isAdminAuthenticated()
+  const authed = await isAdminAuthenticated()
 
   if (!authed) {
     return <AdminLogin />
