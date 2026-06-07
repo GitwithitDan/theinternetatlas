@@ -120,6 +120,8 @@ export default function HomeClient({ listings, categories }: Props) {
 
         {/* Category strip — wraps to multiple rows */}
         <div style={{
+          maxWidth: 'var(--max-w)',
+          margin: '0 auto',
           display: 'flex',
           gap: '6px',
           flexWrap: 'wrap',
