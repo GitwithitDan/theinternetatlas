@@ -6,12 +6,13 @@ import Link from 'next/link'
 export const revalidate = 3600
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: Props) {
+  const { slug } = await params
   await connectDB()
-  const listing = await Listing.findOne({ slug: params.slug }).lean()
+  const listing = await Listing.findOne({ slug }).lean()
   if (!listing) return { title: 'Not found' }
   return {
     title: `${listing.name} — The Internet Atlas`,
@@ -20,8 +21,9 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function ListingPage({ params }: Props) {
+  const { slug } = await params
   await connectDB()
-  const listing = await Listing.findOne({ slug: params.slug }).lean()
+  const listing = await Listing.findOne({ slug }).lean()
   if (!listing) notFound()
 
   const related = await Listing.find({
@@ -33,7 +35,6 @@ export default async function ListingPage({ params }: Props) {
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2.5rem 1.5rem' }}>
-      {/* Breadcrumb */}
       <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--ink-3)', marginBottom: '2rem', display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Link href="/" style={{ color: 'var(--ink-3)' }}>Home</Link>
         <span>›</span>
@@ -44,7 +45,6 @@ export default async function ListingPage({ params }: Props) {
         <span style={{ color: 'var(--ink)' }}>{listing.name}</span>
       </div>
 
-      {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
           <h1 style={{ fontFamily: 'var(--serif)', fontSize: '2.5rem', fontWeight: 400, lineHeight: 1.1 }}>
@@ -76,7 +76,6 @@ export default async function ListingPage({ params }: Props) {
         </a>
       </div>
 
-      {/* Detail table */}
       <div style={{
         border: '0.5px solid var(--border-2)',
         borderRadius: 'var(--radius-lg)',
@@ -94,7 +93,6 @@ export default async function ListingPage({ params }: Props) {
         <DetailRow label="Type" value={listing.type} />
       </div>
 
-      {/* Tags */}
       {listing.tags && listing.tags.length > 0 && (
         <div style={{ marginBottom: '2.5rem' }}>
           <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
@@ -117,7 +115,6 @@ export default async function ListingPage({ params }: Props) {
         </div>
       )}
 
-      {/* Alternatives */}
       {listing.alternatives && listing.alternatives.length > 0 && (
         <div style={{ marginBottom: '2.5rem' }}>
           <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
@@ -140,7 +137,6 @@ export default async function ListingPage({ params }: Props) {
         </div>
       )}
 
-      {/* Related in same category */}
       {related.length > 0 && (
         <div>
           <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '1rem' }}>
