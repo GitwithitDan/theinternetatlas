@@ -118,56 +118,40 @@ export default function HomeClient({ listings, categories }: Props) {
           </div>
         </div>
 
-        {/* Category strip — full width with fade edges */}
-        <div style={{ position: 'relative' }}>
-          <div style={{
-            display: 'flex',
-            gap: '6px',
-            overflowX: 'auto',
-            scrollbarWidth: 'none',
-            padding: '0 1.5rem 0.75rem',
-            WebkitOverflowScrolling: 'touch',
-          }}>
+        {/* Category strip — wraps to multiple rows */}
+        <div style={{
+          display: 'flex',
+          gap: '6px',
+          flexWrap: 'wrap',
+          padding: '0 1.5rem 0.75rem',
+        }}>
+          <button
+            onClick={() => setActiveCategory(null)}
+            style={{
+              ...pillBase,
+              fontSize: '11px',
+              padding: '4px 12px',
+              background: !activeCategory ? 'var(--surface-3)' : 'transparent',
+              color: !activeCategory ? 'var(--ink)' : 'var(--ink-3)',
+            }}
+          >
+            All
+          </button>
+          {categories.map((c) => (
             <button
-              onClick={() => setActiveCategory(null)}
+              key={c}
+              onClick={() => setActiveCategory(c === activeCategory ? null : c)}
               style={{
                 ...pillBase,
                 fontSize: '11px',
                 padding: '4px 12px',
-                background: !activeCategory ? 'var(--surface-3)' : 'transparent',
-                color: !activeCategory ? 'var(--ink)' : 'var(--ink-3)',
-                flexShrink: 0,
+                background: activeCategory === c ? 'var(--surface-3)' : 'transparent',
+                color: activeCategory === c ? 'var(--ink)' : 'var(--ink-3)',
               }}
             >
-              All
+              {c}
             </button>
-            {categories.map((c) => (
-              <button
-                key={c}
-                onClick={() => setActiveCategory(c === activeCategory ? null : c)}
-                style={{
-                  ...pillBase,
-                  fontSize: '11px',
-                  padding: '4px 12px',
-                  background: activeCategory === c ? 'var(--surface-3)' : 'transparent',
-                  color: activeCategory === c ? 'var(--ink)' : 'var(--ink-3)',
-                  flexShrink: 0,
-                }}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-          {/* Right fade to indicate scroll */}
-          <div style={{
-            position: 'absolute',
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: '48px',
-            background: 'linear-gradient(to right, transparent, var(--surface))',
-            pointerEvents: 'none',
-          }} />
+          ))}
         </div>
       </div>
 
