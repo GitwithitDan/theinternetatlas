@@ -6,18 +6,12 @@ import Link from 'next/link'
 export const revalidate = 3600
 
 interface Props {
-  params: { slug: string }
-}
-
-function slugToCategory(slug: string): string {
-  return slug
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ')
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: Props) {
-  const cat = slugToCategory(params.slug)
+  const { slug } = await params
+  const cat = slug.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
   return {
     title: `${cat} — The Internet Atlas`,
     description: `Browse ${cat} tools and resources on The Internet Atlas.`,
@@ -25,11 +19,12 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function CategoryPage({ params }: Props) {
+  const { slug } = await params
   await connectDB()
   const allCategories = await Listing.distinct('category')
 
   const matchedCategory = allCategories.find(
-    (c) => c.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-') === params.slug
+    (c) => c.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-') === slug
   )
 
   if (!matchedCategory) notFound()
