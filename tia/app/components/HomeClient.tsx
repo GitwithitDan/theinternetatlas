@@ -82,7 +82,7 @@ export default function HomeClient({ listings, categories }: Props) {
         }}>
           <input
             type="text"
-            placeholder="What are you looking to do?"
+            placeholder="Search by keyword, category, or tag…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             style={{
