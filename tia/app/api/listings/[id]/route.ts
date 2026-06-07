@@ -8,11 +8,12 @@ function isAdmin(req: NextRequest): boolean {
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     await connectDB()
-    const listing = await Listing.findById(params.id).lean()
+    const listing = await Listing.findById(id).lean()
     if (!listing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
     return NextResponse.json({ listing })
   } catch (err) {
@@ -23,15 +24,16 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   if (!isAdmin(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   try {
+    const { id } = await params
     await connectDB()
     const body = await req.json()
-    const listing = await Listing.findByIdAndUpdate(params.id, body, {
+    const listing = await Listing.findByIdAndUpdate(id, body, {
       new: true,
       runValidators: true,
     }).lean()
@@ -45,14 +47,15 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   if (!isAdmin(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   try {
+    const { id } = await params
     await connectDB()
-    await Listing.findByIdAndDelete(params.id)
+    await Listing.findByIdAndDelete(id)
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('[DELETE /api/listings/[id]]', err)
