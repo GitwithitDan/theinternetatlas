@@ -10,6 +10,7 @@ interface Listing {
   slug: string
   category: string
   description: string
+  best_for?: string
   pricing: string
   type: string
   tags: string[]
@@ -25,6 +26,7 @@ export default function HomeClient({ listings, categories }: Props) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [activePricing, setActivePricing] = useState<string | null>(null)
   const [activeType, setActiveType] = useState<string | null>(null)
+  const [copyLabel, setCopyLabel] = useState('Copy list for AI')
 
   const filtered = useMemo(() => {
     // Split query into individual words, filter out short stop words
@@ -48,6 +50,32 @@ export default function HomeClient({ listings, categories }: Props) {
   }
   function toggleType(val: string) {
     setActiveType((t) => (t === val ? null : val))
+  }
+
+  async function handleCopyForAI() {
+    const lines = listings.map((l) => {
+      const bestFor = l.best_for ? ` — best for: ${l.best_for}` : ''
+      const tags = l.tags && l.tags.length ? ` — tags: ${l.tags.join(', ')}` : ''
+      return `[${l.category}] ${l.name} — ${l.description}${bestFor} (${l.pricing}, ${l.type})${tags} — ${l.url}`
+    })
+
+    const text = [
+      `The Internet Atlas — full site directory (${listings.length} entries, ${categories.length} categories).`,
+      `Every entry is free to be listed here (no pay-to-play), organized by what someone is trying to do rather than what the tool calls itself.`,
+      `Use ONLY the entries below to answer my question — don't suggest anything outside this list. If nothing here fits well, say so.`,
+      '',
+      ...lines,
+      '',
+      'My question: ',
+    ].join('\n')
+
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopyLabel('Copied ✓ — paste into your AI')
+    } catch {
+      setCopyLabel('Copy failed — try again')
+    }
+    setTimeout(() => setCopyLabel('Copy list for AI'), 2500)
   }
 
   const pillBase = {
@@ -99,6 +127,25 @@ export default function HomeClient({ listings, categories }: Props) {
               fontSize: '14px',
             }}
           />
+          <button
+            onClick={handleCopyForAI}
+            title="Copy the full site listing as text so you can paste it into ChatGPT, Claude, or any AI along with your own question — it'll search this list instead of the open web."
+            style={{
+              padding: '8px 14px',
+              borderRadius: 'var(--radius)',
+              border: '0.5px solid var(--border-2)',
+              background: 'var(--ink)',
+              color: 'var(--surface)',
+              fontFamily: 'var(--mono)',
+              fontSize: '11px',
+              textTransform: 'uppercase' as const,
+              letterSpacing: '0.04em',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap' as const,
+            }}
+          >
+            {copyLabel}
+          </button>
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
             {(['free', 'freemium', 'paid'] as const).map((p) => (
               <button key={p} onClick={() => togglePricing(p)} style={{
