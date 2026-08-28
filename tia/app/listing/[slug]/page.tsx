@@ -38,7 +38,7 @@ export default async function ListingPage({ params }: Props) {
       <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--ink-3)', marginBottom: '2rem', display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Link href="/" style={{ color: 'var(--ink-3)' }}>Home</Link>
         <span>›</span>
-        <Link href={`/category/${listing.category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`} style={{ color: 'var(--ink-3)' }}>
+        <Link href={`/category/${listing.category.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')}`} style={{ color: 'var(--ink-3)' }}>
           {listing.category}
         </Link>
         <span>›</span>
