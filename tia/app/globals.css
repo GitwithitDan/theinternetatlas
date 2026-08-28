@@ -98,5 +98,5 @@ button { cursor: pointer; }
 .badge-free     { background: var(--badge-free-bg);     color: var(--badge-free-text); }
 .badge-freemium { background: var(--badge-freemium-bg); color: var(--badge-freemium-text); }
 .badge-paid     { background: var(--badge-paid-bg);     color: var(--badge-paid-text); }
-.badge-web      { background: var(--badge-web-bg);      color: var(--badge-web-text); }
+.badge-website  { background: var(--badge-web-bg);      color: var(--badge-web-text); }
 .badge-software { background: var(--badge-software-bg); color: var(--badge-software-text); }
